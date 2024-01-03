@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+		<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js"
+			  }
+			}
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.js"></script>
+		<script>
+			console.log(Vue);
+		</script>
+	</head>
+	<body>
+		<section class="section">
+			<div class="container">
+				<h1 class="title">
+				ハノイの塔シミュレータ
+				</h1>
+				<p class="subtitle">
+				ハノイの塔シミュレータ（Web版）です．使い方は画面の下部にあります．
+				</p>
+			</div>
+		</section>
+		<div id="canvas"></div>
+		<script type="module" src="/main.js"></script>
+		<section class="section" id="app">
+			<div class="container">
+				<h2 class="title">
+				シミュレータ制御
+				</h2>
+				<h3>動作指示</h3>
+				<textarea class="textarea" v-model="motionCommands"></textarea>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-link" @click="restore"><i class="fas fa-step-backward"></i>最初に戻る</button>
+					  </div>
+					  <div class="control">
+						<span v-if="!playMode"><button class="button is-link" @click="move"><i class="fas fa-play"></i>実行</button></span>
+						<span v-if="playMode"><button class="button is-link" @click="pause"><i class="fas fa-pause"></i>一時停止</button></span>
+					</div>
+				  </div>
+			</div>
+		</section>
+	</body>
+</html>
