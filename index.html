@@ -35,21 +35,23 @@
 			</div>
 		</section>
 		<div id="canvas"></div>
-		<script type="module" src="/main.js"></script>
+		<script type="module" src="./main.js"></script>
 		<section class="section" id="app">
 			<div class="container">
 				<h2 class="title">
 				シミュレータ制御
 				</h2>
 				<h3>動作指示</h3>
-				<textarea class="textarea" v-model="motionCommands"></textarea>
+				<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+				<div class="notification is-primary" v-if="compileError">{{ errorMessage }}</div>
 				<div class="field is-grouped">
 					<div class="control">
 						<button class="button is-link" @click="restore"><i class="fas fa-step-backward"></i>最初に戻る</button>
-					  </div>
-					  <div class="control">
+					</div>
+					<div class="control">
 						<span v-if="!playMode"><button class="button is-link" @click="move"><i class="fas fa-play"></i>実行</button></span>
 						<span v-if="playMode"><button class="button is-link" @click="pause"><i class="fas fa-pause"></i>一時停止</button></span>
+						<span>ステップ {{ currentMotionStep }} / {{ numTotalSteps }}</span>
 					</div>
 				  </div>
 			</div>
