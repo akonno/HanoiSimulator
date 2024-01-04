@@ -22,5 +22,5 @@ This 'Hanoi Simulator' is a program that moves the discs of the 'Tower of Hanoi'
 
 ## Credits
 
-- [Sky mage by VecMes](https://www.freepik.com/free-vector/cloudy-watercolor-background_22039597.htm#query=sky%20texture%20seamless&position=1&from_view=keyword&track=ais&uuid=45f574c2-ab18-4781-bc05-d20bd6a9ad9a) on Freepik
+- [Sky image by VecMes](https://www.freepik.com/free-vector/cloudy-watercolor-background_22039597.htm#query=sky%20texture%20seamless&position=1&from_view=keyword&track=ais&uuid=45f574c2-ab18-4781-bc05-d20bd6a9ad9a) on Freepik
 - Floor, disks and pillars textures by [Lennart Demes at ambientCG](https://ambientcg.com/)
