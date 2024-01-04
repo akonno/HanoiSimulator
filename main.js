@@ -3,8 +3,60 @@
 
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.js';
+import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js';
 
+
+// setup Vue app
+const app = Vue.createApp({
+    data() {
+      return {
+        playMode: false,
+        compiled: false,
+        compileError: false,
+        errorMessage: "",
+        currentMotionStep: 0,
+        numTotalSteps: 0,
+        motionCommands: "A,B\nA,C\nB,C\nA,B\nC,A\nC,B\nA,B"
+      };
+    },
+    methods: {
+      move()
+      {
+          if (!this.compiled) {
+              this.compiled = compile(this.motionCommands);
+          }
+          if (!this.compiled) {
+              this.compileError = true;
+              this.playMode = false;
+          } else {
+              this.compileError = false;
+              this.playMode = true;
+          }
+      },
+      pause()
+      {
+          this.playMode = false;
+      },
+      restore()
+      {
+          this.playMode = false;
+          // Restore all the disks to the initial positions.
+          for (let i = 0; i < numDisks; ++i) {
+              disks[i].position.x = -pillarDistance;
+              disks[i].position.y = -0.5*pillarHeight + diskThickness*(numDisks - i - 1 + 0.5);
+          }
+          step = 0;
+          this.currentMotionStep = 0;
+      },
+      commandChanged()
+      {
+          this.restore();
+          this.compiled = false;
+          this.currentMotionStep = this.numTotalSteps = 0;
+      }
+    }
+  }).mount('#app');
+  
 // scene, camera and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -242,56 +294,6 @@ function onResize()
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
 }
-
-const app = Vue.createApp({
-  data() {
-    return {
-      playMode: false,
-      compiled: false,
-      compileError: false,
-      errorMessage: "",
-      currentMotionStep: 0,
-      numTotalSteps: 0,
-      motionCommands: "A,B\nA,C\nB,C\nA,B\nC,A\nC,B\nA,B"
-    };
-  },
-  methods: {
-    move()
-    {
-        if (!this.compiled) {
-            this.compiled = compile(this.motionCommands);
-        }
-        if (!this.compiled) {
-            this.compileError = true;
-            this.playMode = false;
-        } else {
-            this.compileError = false;
-            this.playMode = true;
-        }
-    },
-    pause()
-    {
-        this.playMode = false;
-    },
-    restore()
-    {
-        this.playMode = false;
-        // Restore all the disks to the initial positions.
-        for (let i = 0; i < numDisks; ++i) {
-            disks[i].position.x = -pillarDistance;
-            disks[i].position.y = -0.5*pillarHeight + diskThickness*(numDisks - i - 1 + 0.5);
-        }
-        step = 0;
-        this.currentMotionStep = 0;
-    },
-    commandChanged()
-    {
-        this.restore();
-        this.compiled = false;
-        this.currentMotionStep = this.numTotalSteps = 0;
-    }
-  }
-}).mount('#app');
 
 // Start visualization
 // This should be after initializing app, because animate() uses app.playMode.
