@@ -3,16 +3,44 @@
 
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js';
+import { createApp } from 'vue';
+import { createI18n } from 'vue-i18n';
 
+// Vue I18n
+const messages = {
+    en: {
+        message: {
+            hanoisimulatortitle: 'The Tower of Hanoi Simulator',
+            hanoisimulatordesc: 'Here is the Hanoi Tower Simulator (Web version). Instructions are at the bottom of the page.',
+            controller: 'Controller',
+            motioncommands: 'Motion commands',
+            reset: 'Reset',
+            play: 'Run simulation',
+            pause: 'Pause',
+            step: 'Step'
+        },
+    },
+    ja: {
+        message: {
+            hanoisimulatortitle: 'ハノイの塔シミュレータ',
+            hanoisimulatordesc: 'ハノイの塔シミュレータ（Web版）です．使い方は画面の下部にあります．',
+            controller: 'シミュレータ制御',
+            motioncommands: '動作指示',
+            reset: '最初に戻る',
+            play: '実行',
+            pause: '一時停止',
+            step: 'ステップ'
+        },
+    }
+};
 
 // setup Vue app
-const app = Vue.createApp({
+const app = createApp({
     data() {
       return {
         playMode: false,
         compiled: false,
-        compileError: false,
+        errorOccured: false,
         errorMessage: "",
         currentMotionStep: 0,
         numTotalSteps: 0,
@@ -26,10 +54,10 @@ const app = Vue.createApp({
               this.compiled = compile(this.motionCommands);
           }
           if (!this.compiled) {
-              this.compileError = true;
+              this.errorOccured = true;
               this.playMode = false;
           } else {
-              this.compileError = false;
+              this.errorOccured = false;
               this.playMode = true;
           }
       },
@@ -55,8 +83,16 @@ const app = Vue.createApp({
           this.currentMotionStep = this.numTotalSteps = 0;
       }
     }
-  }).mount('#app');
-  
+  });
+
+const i18n = createI18n({
+    locale: 'ja',
+    fallbackLocale: 'en',
+    messages,
+})
+app.use(i18n);
+const mounted = app.mount("#app");
+
 // scene, camera and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -65,7 +101,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer({antialias: true});
 
-const width = window.innerWidth;
+const width = 0.94*window.innerWidth;
 renderer.setSize(width, width / 16 * 9);
 document.getElementById("canvas").appendChild(renderer.domElement);
 
@@ -182,8 +218,8 @@ function compile(commands) {
             motions.push([m[1], m[2]]);
             // console.log(m[1], " -> ", m[2]);
         } else {
-            app.errorMessage = 'error: cannot parse line ' + lineno;
-            console.error(app.errorMessage);
+            mounted.errorMessage = 'error: cannot parse line ' + lineno;
+            console.error(mounted.errorMessage);
             errorOccured = true;
         }
         ++lineno;
@@ -214,16 +250,16 @@ function compile(commands) {
         }
 
         if (towers[p1].length === 0) {
-            app.errorMessage = 'error: tower ' + p1 + ' is empty at line ' + lineno;
-            console.error(app.errorMessage);
+            mounted.errorMessage = 'error: tower ' + p1 + ' is empty at line ' + lineno;
+            console.error(mounted.errorMessage);
             errorOccured = true;
             return;
         }
         const diskId = towers[p1].pop();
         const p2top = towers[p2][towers[p2].length - 1];
         if (towers[p2].length > 0 && p2top < diskId) {
-            app.errorMessage = 'error: top disk of tower ' + p2 + ' is smaller than ' + diskId + ' at line ' + lineno;
-            console.error(app.errorMessage);
+            mounted.errorMessage = 'error: top disk of tower ' + p2 + ' is smaller than ' + diskId + ' at line ' + lineno;
+            console.error(mounted.errorMessage);
             errorOccured = true;
             return;
         }
@@ -233,7 +269,7 @@ function compile(commands) {
         ++lineno;
     });
 
-    app.numTotalSteps = compiledMotions.length;
+    mounted.numTotalSteps = compiledMotions.length;
     // console.log(compiledMotions);
     return !errorOccured;
 }
@@ -242,12 +278,12 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Motion
-    if (app.playMode) {
+    if (mounted.playMode) {
         const animStep = parseInt(step / (3 * animNumSteps));
         const animStartStep = animStep * (3 * animNumSteps);
-        app.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
+        mounted.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
         if (animStep >= compiledMotions.length) {
-            app.playMode = false;
+            mounted.playMode = false;
         } else {
             const disk = disks[compiledMotions[animStep][0]];
             const startX = pillarDistance * (compiledMotions[animStep][1] - 1);
@@ -283,7 +319,7 @@ window.addEventListener('resize', onResize);
 
 function onResize()
 {
-    const width = window.innerWidth;
+    const width = 0.94*window.innerWidth;
     const height = width / 16 * 9;
 
     // レンダラーのサイズを調整する
@@ -296,10 +332,10 @@ function onResize()
 }
 
 // Start visualization
-// This should be after initializing app, because animate() uses app.playMode.
+// This should be after initializing app, because animate() uses mounted.playMode.
 if (WebGL.isWebGLAvailable()) {
     animate();
 } else {
-    const warning = WebGL.getWebGLErrorMessage();
-    document.getElementById('container').appendChild(warning);
+    mounted.errorMessage = WebGL.getWebGLErrorMessage();
+    mounted.errorOccured = true;
 }

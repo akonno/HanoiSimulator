@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>My first three.js app</title>
+		<title>Hanoi Simulator</title>
 		<style>
 			body { margin: 0; }
 		</style>
@@ -14,44 +14,73 @@
 			  "imports": {
 				"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
 				"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-				"vue": "https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js"
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js",
+				"vue-i18n": "https://unpkg.com/vue-i18n@9.8.0/dist/vue-i18n.esm-browser.prod.js"
 			  }
 			}
 		</script>
-		<script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.prod.js"></script>
+		<script src="https://unpkg.com/vue-i18n@9.8.0/dist/vue-i18n.global.prod.js"></script>
 	</head>
 	<body>
-		<section class="section">
-			<div class="container">
-				<h1 class="title">
-				ハノイの塔シミュレータ
-				</h1>
-				<p class="subtitle">
-				ハノイの塔シミュレータ（Web版）です．使い方は画面の下部にあります．
-				</p>
-			</div>
-		</section>
-		<div id="canvas"></div>
-		<script type="module" src="main.js"></script>
-		<section class="section" id="app">
-			<div class="container">
-				<h2 class="title">
-				シミュレータ制御
-				</h2>
-				<h3>動作指示</h3>
-				<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
-				<div class="notification is-primary" v-if="compileError">{{ errorMessage }}</div>
+		<div id="app">
+			<section class="hero">
+				<div class="hero-body">
+					<h1 class="title">
+					{{ $t("message.hanoisimulatortitle") }}
+					</h1>
+					<p class="subtitle">
+						{{ $t("message.hanoisimulatordesc") }}
+					</p>
+				</div>
+			</section>
+			<section class="section">
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-link" @click="restore"><i class="fas fa-step-backward"></i>最初に戻る</button>
+						<button class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
 					</div>
 					<div class="control">
-						<span v-if="!playMode"><button class="button is-link" @click="move"><i class="fas fa-play"></i>実行</button></span>
-						<span v-if="playMode"><button class="button is-link" @click="pause"><i class="fas fa-pause"></i>一時停止</button></span>
-						<span>ステップ {{ currentMotionStep }} / {{ numTotalSteps }}</span>
+						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
+						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
+						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
 					</div>
-				  </div>
+				</div>
+				<div id="canvas"></div>
+				<script type="module" src="main.js"></script>
+			</section>
+			<section>
+			<div class="container">
+				<div class="box">
+					<h2 class="subtitle">
+					{{ $t("message.controller") }}
+				</h2>
+				<label class="label">{{ $t("message.motioncommands") }}</label>
+				<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+				<div class="notification is-primary" v-if="errorOccured">{{ errorMessage }}</div>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+					</div>
+					<div class="control">
+						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
+						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
+						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
+					</div>
+				</div>
+				</div>
 			</div>
+			</section>
+		</div>
+		<section class="section">
+			<p><a href="https://www.freepik.com/free-vector/cloudy-watercolor-background_22039597.htm#query=sky%20texture%20seamless&position=1&from_view=keyword&track=ais&uuid=45f574c2-ab18-4781-bc05-d20bd6a9ad9a">Sky Image by VecMes</a> on Freepik</p>
+			<p>Floor, disks and pillars texture by <a href="https://ambientcg.com/">Lennart Demes at ambientCG</a></p>
 		</section>
+		<footer class="footer">
+			<div class="content has-text-centered">
+			  <p>
+				<strong>Hanoi Simulator</strong> by KONNO Akihisa</a>
+			  </p>
+			</div>
+		</footer>
 	</body>
 </html>
