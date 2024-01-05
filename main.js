@@ -58,6 +58,11 @@ const messages = {
     }
 };
 
+const i18n = createI18n({
+    locale: navigator.language.split('-')[0],
+    fallbackLocale: 'en',
+    messages,
+})
 // setup Vue app
 const app = createApp({
     data() {
@@ -92,10 +97,10 @@ const app = createApp({
       restore()
       {
           this.playMode = false;
-          // Restore all the disks to the initial positions.
-          for (let i = 0; i < numDisks; ++i) {
-              disks[i].position.x = -pillarDistance;
-              disks[i].position.y = -0.5*pillarHeight + diskThickness*(numDisks - i - 1 + 0.5);
+          // Restore all the discs to the initial positions.
+          for (let i = 0; i < numDiscs; ++i) {
+              discs[i].position.x = -pillarDistance;
+              discs[i].position.y = -0.5*pillarHeight + discThickness*(numDiscs - i - 1 + 0.5);
           }
           step = 0;
           this.currentMotionStep = 0;
@@ -107,15 +112,7 @@ const app = createApp({
           this.currentMotionStep = this.numTotalSteps = 0;
       }
     }
-  });
-
-const i18n = createI18n({
-    locale: 'ja',
-    fallbackLocale: 'en',
-    messages,
-})
-app.use(i18n);
-const mounted = app.mount("#app");
+  }).use(i18n).mount("#app");
 
 // scene, camera and renderer
 const scene = new THREE.Scene();
@@ -133,8 +130,8 @@ document.getElementById("canvas").appendChild(renderer.domElement);
 const pillarDistance = 3.2;
 const pillarDiameter = 0.2;
 const pillarHeight = 3.0;
-const diskThickness = 0.2;
-const numDisks = 7;
+const discThickness = 0.2;
+const numDiscs = 7;
 const animNumSteps = 60;
 
 // Light
@@ -190,24 +187,24 @@ for (let i = -1; i <= 1; ++i) {
     pillar.push(p);
 }
 
-// Disks
-const diskColors = [
+// discs
+const discColors = [
     0xe69f00, 0x56b4e9, 0x009e73, 0xf0e442, 0x0072b2, 0xd55e00, 0xcc79a7
 ];
-const diskTexture = new THREE.TextureLoader().load('public/textures/Travertine009/Travertine009_1K-JPG_Color.jpg');
-diskTexture.wrapS = THREE.RepeatWrapping;
-diskTexture.wrapT = THREE.RepeatWrapping;
-diskTexture.repeat.set(2, 2);
-const disks = [];
-for (let i = 0; i < numDisks; ++i) {
+const discTexture = new THREE.TextureLoader().load('public/textures/Travertine009/Travertine009_1K-JPG_Color.jpg');
+discTexture.wrapS = THREE.RepeatWrapping;
+discTexture.wrapT = THREE.RepeatWrapping;
+discTexture.repeat.set(2, 2);
+const discs = [];
+for (let i = 0; i < numDiscs; ++i) {
     const radius = 0.4 + 0.1 * i;
     const geometry = new THREE.CylinderGeometry(radius, radius, 0.2, 32);
-    const material = new THREE.MeshLambertMaterial({map: diskTexture, color: diskColors[i % 7]});
+    const material = new THREE.MeshLambertMaterial({map: discTexture, color: discColors[i % 7]});
     const d = new THREE.Mesh(geometry, material);
     d.position.x = -pillarDistance;
-    d.position.y = -0.5*pillarHeight + diskThickness*(numDisks - i - 1 + 0.5);
+    d.position.y = -0.5*pillarHeight + discThickness*(numDiscs - i - 1 + 0.5);
     scene.add(d);
-    disks.push(d);
+    discs.push(d);
 }
 
 // Camera position
@@ -224,7 +221,7 @@ let step = 0;
 let compiledMotions = [];
 
 function compile(commands) {
-    // Parse commands and simulate disk motions
+    // Parse commands and simulate disc motions
     compiledMotions = [];
     // First parse commands.
     const motionLines = commands.split("\n");
@@ -242,17 +239,17 @@ function compile(commands) {
             motions.push([m[1], m[2]]);
             // console.log(m[1], " -> ", m[2]);
         } else {
-            mounted.errorMessage = 'error: cannot parse line ' + lineno;
-            console.error(mounted.errorMessage);
+            app.errorMessage = 'error: cannot parse line ' + lineno;
+            console.error(app.errorMessage);
             errorOccured = true;
         }
         ++lineno;
     });
 
-    // Simulate disk motions.
+    // Simulate disc motions.
     let towers = [ [], [], [] ];
-    for (let i = 0; i < numDisks; ++i) {
-        towers[0].push(numDisks - i - 1);
+    for (let i = 0; i < numDiscs; ++i) {
+        towers[0].push(numDiscs - i - 1);
     }
 
     lineno = 1;
@@ -274,26 +271,26 @@ function compile(commands) {
         }
 
         if (towers[p1].length === 0) {
-            mounted.errorMessage = 'error: tower ' + p1 + ' is empty at line ' + lineno;
-            console.error(mounted.errorMessage);
+            app.errorMessage = 'error: tower ' + p1 + ' is empty at line ' + lineno;
+            console.error(app.errorMessage);
             errorOccured = true;
             return;
         }
-        const diskId = towers[p1].pop();
+        const discId = towers[p1].pop();
         const p2top = towers[p2][towers[p2].length - 1];
-        if (towers[p2].length > 0 && p2top < diskId) {
-            mounted.errorMessage = 'error: top disk of tower ' + p2 + ' is smaller than ' + diskId + ' at line ' + lineno;
-            console.error(mounted.errorMessage);
+        if (towers[p2].length > 0 && p2top < discId) {
+            app.errorMessage = 'error: top disc of tower ' + p2 + ' is smaller than ' + discId + ' at line ' + lineno;
+            console.error(app.errorMessage);
             errorOccured = true;
             return;
         }
-        compiledMotions.push([diskId, p1, p2, towers[p1].length + 1, towers[p2].length]);
-        towers[p2].push(diskId);
+        compiledMotions.push([discId, p1, p2, towers[p1].length + 1, towers[p2].length]);
+        towers[p2].push(discId);
 
         ++lineno;
     });
 
-    mounted.numTotalSteps = compiledMotions.length;
+    app.numTotalSteps = compiledMotions.length;
     // console.log(compiledMotions);
     return !errorOccured;
 }
@@ -302,33 +299,33 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Motion
-    if (mounted.playMode) {
+    if (app.playMode) {
         const animStep = parseInt(step / (3 * animNumSteps));
         const animStartStep = animStep * (3 * animNumSteps);
-        mounted.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
+        app.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
         if (animStep >= compiledMotions.length) {
-            mounted.playMode = false;
+            app.playMode = false;
         } else {
-            const disk = disks[compiledMotions[animStep][0]];
+            const disc = discs[compiledMotions[animStep][0]];
             const startX = pillarDistance * (compiledMotions[animStep][1] - 1);
-            const startHeight = -0.5*pillarHeight + diskThickness * (compiledMotions[animStep][3] + 0.5);
+            const startHeight = -0.5*pillarHeight + discThickness * (compiledMotions[animStep][3] + 0.5);
             const endX = pillarDistance * (compiledMotions[animStep][2] - 1);
-            const endHeight = -0.5*pillarHeight + diskThickness * (compiledMotions[animStep][4] + 0.5);
-            // console.log(disk, startX, startHeight, endX, endHeight);
+            const endHeight = -0.5*pillarHeight + discThickness * (compiledMotions[animStep][4] + 0.5);
+            // console.log(disc, startX, startHeight, endX, endHeight);
             if (step - animStartStep < animNumSteps) {
                 const height = startHeight + (hoverHeight - startHeight) * (step - animStartStep) / animNumSteps;
-                disk.position.x = startX;
-                disk.position.y = height;
+                disc.position.x = startX;
+                disc.position.y = height;
             }
             else if (step - animStartStep < 2 * animNumSteps) {
                 const x = startX + (endX - startX) * ((step - animStartStep) - animNumSteps) / animNumSteps;
-                disk.position.x = x;
-                disk.position.y = hoverHeight;
+                disc.position.x = x;
+                disc.position.y = hoverHeight;
             }
             else if (step - animStartStep < 3 * animNumSteps) {
                 const height = endHeight + (hoverHeight - endHeight) * (3 * animNumSteps - (step - animStartStep)) / animNumSteps;
-                disk.position.x = endX;
-                disk.position.y = height;
+                disc.position.x = endX;
+                disc.position.y = height;
             }
 
             ++step;
@@ -356,10 +353,10 @@ function onResize()
 }
 
 // Start visualization
-// This should be after initializing app, because animate() uses mounted.playMode.
+// This should be after initializing app, because animate() uses app.playMode.
 if (WebGL.isWebGLAvailable()) {
     animate();
 } else {
-    mounted.errorMessage = WebGL.getWebGLErrorMessage();
-    mounted.errorOccured = true;
+    app.errorMessage = WebGL.getWebGLErrorMessage();
+    app.errorOccured = true;
 }
