@@ -64,11 +64,15 @@ SOFTWARE.
 					</div>
 					<div class="control">
 						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
+					</div>
+					<div class="control">
 						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
+					</div>
+					<div class="control">
 						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
 					</div>
 				</div>
-				<div id="canvas"></div>
+				<div class="container" id="canvas"></div>
 				<script type="module" src="main.js"></script>
 			</section>
 			<section>
@@ -78,7 +82,9 @@ SOFTWARE.
 					{{ $t("message.controller") }}
 				</h2>
 				<label class="label">{{ $t("message.motioncommands") }}</label>
-				<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+				<div class="control">
+					<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+				</div>
 				<div class="notification is-primary" v-if="errorOccured">{{ errorMessage }}</div>
 				<div class="field is-grouped">
 					<div class="control">
@@ -86,7 +92,11 @@ SOFTWARE.
 					</div>
 					<div class="control">
 						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
+					</div>
+					<div class="control">
 						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
+					</div>
+					<div class="control">
 						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
 					</div>
 				</div>

@@ -62,7 +62,8 @@ const i18n = createI18n({
     locale: navigator.language.split('-')[0],
     fallbackLocale: 'en',
     messages,
-})
+});
+
 // setup Vue app
 const app = createApp({
     data() {
@@ -114,6 +115,7 @@ const app = createApp({
     }
   }).use(i18n).mount("#app");
 
+// The tower of Hanoi visualization/animation
 // scene, camera and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -122,7 +124,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer({antialias: true});
 
-const width = 0.94*window.innerWidth;
+const width = document.getElementById("canvas").scrollWidth;
 renderer.setSize(width, width / 16 * 9);
 document.getElementById("canvas").appendChild(renderer.domElement);
 
@@ -340,7 +342,7 @@ window.addEventListener('resize', onResize);
 
 function onResize()
 {
-    const width = 0.94*window.innerWidth;
+    const width = document.getElementById("canvas").scrollWidth;
     const height = width / 16 * 9;
 
     // レンダラーのサイズを調整する
