@@ -150,7 +150,7 @@ const groundGeometry = new THREE.BoxGeometry(5000, 0.1, 2200);
 const groundTexture = new THREE.TextureLoader().load('public/textures/PavingStones128/PavingStones128_1K-JPG_Color.jpg');
 groundTexture.wrapS = THREE.RepeatWrapping;
 groundTexture.wrapT = THREE.RepeatWrapping;
-groundTexture.repeat.set(1100, 1100);
+groundTexture.repeat.set(2500, 1100);
 const groundMaterial = new THREE.MeshLambertMaterial({map: groundTexture});
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.position.y = -0.5*pillarHeight - 0.05;
