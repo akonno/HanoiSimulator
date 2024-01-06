@@ -146,7 +146,7 @@ light2.position.z = 10;
 scene.add(light2);
 
 // Ground
-const groundGeometry = new THREE.BoxGeometry(2200, 0.1, 2200);
+const groundGeometry = new THREE.BoxGeometry(5000, 0.1, 2200);
 const groundTexture = new THREE.TextureLoader().load('public/textures/PavingStones128/PavingStones128_1K-JPG_Color.jpg');
 groundTexture.wrapS = THREE.RepeatWrapping;
 groundTexture.wrapT = THREE.RepeatWrapping;
@@ -157,22 +157,24 @@ ground.position.y = -0.5*pillarHeight - 0.05;
 scene.add(ground);
 
 // Sky
-const skyGeometry = new THREE.BoxGeometry(2200, 0.1, 2200);
-const skyTexture = new THREE.TextureLoader().load('public/textures/cloudy-watercolor-background/4.jpg');
+const skyGeometry = new THREE.BoxGeometry(5000, 0.1, 2200);
+const skyTexture = new THREE.TextureLoader().load('public/textures/skytile1.png');
 skyTexture.wrapS = THREE.RepeatWrapping;
 skyTexture.wrapT = THREE.RepeatWrapping;
-skyTexture.repeat.set(1, 1);
+skyTexture.repeat.set(20, 8);
 const skyMaterial = new THREE.MeshBasicMaterial({map: skyTexture});
 const sky = new THREE.Mesh(skyGeometry, skyMaterial);
 sky.position.y = 15.0;
+sky.rotation.x = -0.016;
 scene.add(sky);
 
 // Far walls
-const wallGeometry = new THREE.BoxGeometry(2200, 2200, 0.1);
-const wallMaterial = new THREE.MeshBasicMaterial({map: skyTexture});
-const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-wall.position.z = -200;
-scene.add(wall);
+// const wallGeometry = new THREE.BoxGeometry(2200, 2200, 0.1);
+// const wallMaterial = new THREE.MeshBasicMaterial({map: skyTexture});
+// const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+// wall.position.y = - 1100 + 15
+// wall.position.z = -200;
+// scene.add(wall);
 
 // Pillars
 const pillarGeometry = new THREE.CylinderGeometry(0.5*pillarDiameter, 0.5*pillarDiameter, pillarHeight, 16);
