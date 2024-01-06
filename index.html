@@ -60,16 +60,22 @@ SOFTWARE.
 			<section class="section">
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+						<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+					</div>
+					<div class="control" v-if="!errorOccured && !playMode">
+						<button v-bind:disabled="finished" class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
+					</div>
+					<div class="control" v-if="!errorOccured && playMode">
+						<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
+					</div>
+					<div class="control" v-if="errorOccured && !playMode">
+						<button class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
+					</div>
+					<div class="control" v-if="errorOccured && playMode">
+						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
 					</div>
 					<div class="control">
-						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
-					</div>
-					<div class="control">
-						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
-					</div>
-					<div class="control">
-						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
+						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
 					</div>
 				</div>
 				<div class="container" id="canvas"></div>
@@ -88,16 +94,22 @@ SOFTWARE.
 				<div class="notification is-primary" v-if="errorOccured">{{ errorMessage }}</div>
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+						<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+					</div>
+					<div class="control" v-if="!errorOccured && !playMode">
+						<button v-bind:disabled="finished" class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
+					</div>
+					<div class="control" v-if="!errorOccured && playMode">
+						<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
+					</div>
+					<div class="control" v-if="errorOccured && !playMode">
+						<button class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
+					</div>
+					<div class="control" v-if="errorOccured && playMode">
+						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
 					</div>
 					<div class="control">
-						<span v-if="!playMode"><button class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button></span>
-					</div>
-					<div class="control">
-						<span v-if="playMode"><button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button></span>
-					</div>
-					<div class="control">
-						<span>{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}</span>
+						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
 					</div>
 				</div>
 				</div>

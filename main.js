@@ -41,6 +41,7 @@ const messages = {
             reset: 'Reset',
             play: 'Run simulation',
             pause: 'Pause',
+            moveIfError: 'Move until error',
             step: 'Step'
         },
     },
@@ -53,6 +54,7 @@ const messages = {
             reset: '最初に戻る',
             play: '実行',
             pause: '一時停止',
+            moveIfError: 'エラーの場所まで実行',
             step: 'ステップ'
         },
     }
@@ -74,6 +76,7 @@ const app = createApp({
         errorMessage: "",
         currentMotionStep: 0,
         numTotalSteps: 0,
+        finished: false,
         motionCommands: "A,B\nA,C\nB,C\nA,B\nC,A\nC,B\nA,B"
       };
     },
@@ -105,12 +108,23 @@ const app = createApp({
           }
           step = 0;
           this.currentMotionStep = 0;
+          this.finished = false;
+      },
+      moveIfError()
+      {
+        if (this.errorOccured == false) {
+            // Called with no error; program bug?
+            console.error('error: moveIfError called with errorOccured == false');
+            return;
+        }
+        this.playMode = true;
       },
       commandChanged()
       {
           this.restore();
-          this.compiled = false;
+          this.compiled = this.errorOccured = false;
           this.currentMotionStep = this.numTotalSteps = 0;
+          this.finished = false;
       }
     }
   }).use(i18n).mount("#app");
@@ -249,6 +263,7 @@ function compile(commands) {
         }
         ++lineno;
     });
+    app.numTotalSteps = motionLines.length;
 
     // Simulate disc motions.
     let towers = [ [], [], [] ];
@@ -275,26 +290,30 @@ function compile(commands) {
         }
 
         if (towers[p1].length === 0) {
-            app.errorMessage = 'error: tower ' + p1 + ' is empty at line ' + lineno;
+            app.errorMessage = 'error: tower ' + ['A', 'B', 'C'][p1] + ' is empty at line ' + lineno;
             console.error(app.errorMessage);
             errorOccured = true;
             return;
         }
         const discId = towers[p1].pop();
         const p2top = towers[p2][towers[p2].length - 1];
-        if (towers[p2].length > 0 && p2top < discId) {
-            app.errorMessage = 'error: top disc of tower ' + p2 + ' is smaller than ' + discId + ' at line ' + lineno;
+        compiledMotions.push([discId, p1, p2, towers[p1].length + 1, towers[p2].length]);
+        if (p1 == p2) {
+            app.errorMessage = 'error: the disc is not moved on tower ' + ['A', 'B', 'C'][p1] + ' at line ' + lineno;
+            console.error(app.errorMessage);
+            errorOccured = true;
+            return;
+        } else if (towers[p2].length > 0 && p2top < discId) {
+            app.errorMessage = 'error: the size of disc at the top of tower ' + ['A', 'B', 'C'][p2] + ' is ' + (p2top+1) + ', smaller than ' + (discId+1) + ' at line ' + lineno;
             console.error(app.errorMessage);
             errorOccured = true;
             return;
         }
-        compiledMotions.push([discId, p1, p2, towers[p1].length + 1, towers[p2].length]);
         towers[p2].push(discId);
 
         ++lineno;
     });
 
-    app.numTotalSteps = compiledMotions.length;
     // console.log(compiledMotions);
     return !errorOccured;
 }
@@ -309,7 +328,9 @@ function animate() {
         app.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
         if (animStep >= compiledMotions.length) {
             app.playMode = false;
+            app.finished = true;
         } else {
+            app.finished = false;
             const disc = discs[compiledMotions[animStep][0]];
             const startX = pillarDistance * (compiledMotions[animStep][1] - 1);
             const startHeight = -0.5*pillarHeight + discThickness * (compiledMotions[animStep][3] + 0.5);
