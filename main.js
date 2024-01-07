@@ -261,10 +261,12 @@ camera.position.y = 1;
 const hoverHeight = 1.8;
 let step = 0;
 let compiledMotions = [];
+let errorLine = -1;
 
 function compile(commands) {
     // Parse commands and simulate disc motions
     compiledMotions = [];
+    errorLine = -1;
     // First parse commands.
     const motionLines = commands.split("\n");
     const re = new RegExp("([ABC123])[, ]([ABC123])");
@@ -281,7 +283,10 @@ function compile(commands) {
             motions.push([m[1], m[2]]);
             // console.log(m[1], " -> ", m[2]);
         } else {
-            app.errorMessage = 'error: cannot parse line ' + lineno;
+            if (!errorOccured) {
+                app.errorMessage = 'error: cannot parse line ' + lineno;
+                errorLine = lineno - 1;
+            }
             console.error(app.errorMessage);
             errorOccured = true;
         }
@@ -314,7 +319,10 @@ function compile(commands) {
         }
 
         if (towers[p1].length === 0) {
-            app.errorMessage = 'error: tower ' + ['A', 'B', 'C'][p1] + ' is empty at line ' + lineno;
+            if (!errorOccured) {
+                app.errorMessage = 'error: tower ' + ['A', 'B', 'C'][p1] + ' is empty at line ' + lineno;
+                errorLine = lineno - 1;
+            }
             console.error(app.errorMessage);
             errorOccured = true;
             return;
@@ -323,12 +331,18 @@ function compile(commands) {
         const p2top = towers[p2][towers[p2].length - 1];
         compiledMotions.push([discId, p1, p2, towers[p1].length + 1, towers[p2].length]);
         if (p1 == p2) {
-            app.errorMessage = 'error: the disc is not moved on tower ' + ['A', 'B', 'C'][p1] + ' at line ' + lineno;
+            if (!errorOccured) {
+                app.errorMessage = 'error: the disc is not moved on tower ' + ['A', 'B', 'C'][p1] + ' at line ' + lineno;
+                errorLine = lineno;
+            }
             console.error(app.errorMessage);
             errorOccured = true;
             return;
         } else if (towers[p2].length > 0 && p2top < discId) {
-            app.errorMessage = 'error: the size of disc at the top of tower ' + ['A', 'B', 'C'][p2] + ' is ' + (p2top+1) + ', smaller than ' + (discId+1) + ' at line ' + lineno;
+            if (!errorOccured) {
+                app.errorMessage = 'error: the size of disc at the top of tower ' + ['A', 'B', 'C'][p2] + ' is ' + (p2top+1) + ', smaller than ' + (discId+1) + ' at line ' + lineno;
+                errorLine = lineno;
+            }
             console.error(app.errorMessage);
             errorOccured = true;
             return;
@@ -349,8 +363,9 @@ function animate() {
     if (app.playMode) {
         const animStep = parseInt(step / (3 * animNumSteps));
         const animStartStep = animStep * (3 * animNumSteps);
+        const finalStep = errorLine >= 0 ? errorLine : compiledMotions.length;
         app.currentMotionStep = animStep + 1 >= compiledMotions.length ? compiledMotions.length : animStep + 1;
-        if (animStep >= compiledMotions.length) {
+        if (animStep >= finalStep) {
             app.playMode = false;
             app.finished = true;
         } else {

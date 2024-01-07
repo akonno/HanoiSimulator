@@ -89,42 +89,48 @@ SOFTWARE.
 				<div class="box" id="controllerBox">
 					<h2 class="subtitle">
 					{{ $t("message.controller") }}
-				</h2>
-				<label class="label">{{ $t("message.motioncommands") }}</label>
-				<div class="control">
-					<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
-				</div>
-				<div class="notification is-primary" v-if="errorOccured">{{ errorMessage }}</div>
-				<div class="field is-grouped">
-					<div class="control">
-						<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+					</h2>
+					<div class="columns">
+						<div class="column">
+							<label class="label">{{ $t("message.motioncommands") }}</label>
+							<div class="control has-icons-right">
+								<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+							</div>		
+						</div>
+						<div class="column">
+							<div class="control">
+								{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
+							</div>
+							<div class="field is-grouped">
+								<div class="control">
+									<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
+								</div>
+								<div class="control" v-if="!errorOccured && !playMode">
+									<button v-bind:disabled="finished" class="button is-primary" @click="play"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
+								</div>
+								<div class="control" v-if="!errorOccured && playMode">
+									<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
+								</div>
+								<div class="control" v-if="errorOccured && !playMode">
+									<button v-bind:disabled="finished" class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
+								</div>
+								<div class="control" v-if="errorOccured && playMode">
+									<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
+								</div>
+								<div class="control">
+									<button v-bind:disabled="playMode" class="button is-primary" @click="takeScreenShot"><i class="fas fa-camera"></i>{{ $t("message.screenshot") }}</button>
+								</div>
+							</div>		
+							<div class="notification is-danger" v-if="errorOccured">{{ errorMessage }}</div>
+						</div>
 					</div>
-					<div class="control" v-if="!errorOccured && !playMode">
-						<button v-bind:disabled="finished" class="button is-primary" @click="play"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
-					</div>
-					<div class="control" v-if="!errorOccured && playMode">
-						<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
-					</div>
-					<div class="control" v-if="errorOccured && !playMode">
-						<button v-bind:disabled="finished" class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
-					</div>
-					<div class="control" v-if="errorOccured && playMode">
-						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
-					</div>
-					<div class="control">
-						<button v-bind:disabled="playMode" class="button is-primary" @click="takeScreenShot"><i class="fas fa-camera"></i>{{ $t("message.screenshot") }}</button>
-					</div>
-					<div class="control">
-						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
-					</div>
-				</div>
 				</div>
 			</div>
 			</section>
 		</div>
 		<section class="section">
-			<p>Source: <a href="https://github.com/akonno/hanoisimulator" target="_blank">Hanoi Simulator</a></p>
-			<p>Textures of floor, discs and pillars by <a href="https://ambientcg.com/" target="_blank">Lennart Demes at ambientCG</a></p>
+			<p>Source: <a href="https://github.com/akonno/hanoisimulator" target="_blank">Hanoi Simulator</a> on <a href="https://github.com/" target="_blank">GitHub</a></p>
+			<p>Textures for the floor, discs and pillars by <a href="https://ambientcg.com/" target="_blank">Lennart Demes at ambientCG</a></p>
 		</section>
 		<footer class="footer">
 			<div class="content has-text-centered">

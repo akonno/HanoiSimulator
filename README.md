@@ -22,4 +22,4 @@ This 'Hanoi Simulator' is a program that moves the discs of the 'Tower of Hanoi'
 
 ## Credits
 
-- Textures of floor, discs and pillars by [Lennart Demes at ambientCG](https://ambientcg.com/)
+- Textures for the floor, discs and pillars by [Lennart Demes at ambientCG](https://ambientcg.com/)
