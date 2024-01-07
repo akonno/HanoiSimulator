@@ -76,6 +76,9 @@ SOFTWARE.
 						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
 					</div>
 					<div class="control">
+						<button v-bind:disabled="playMode" class="button is-primary" @click="takeScreenShot"><i class="fas fa-camera"></i>{{ $t("message.screenshot") }}</button>
+					</div>
+					<div class="control">
 						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
 					</div>
 				</div>
@@ -107,6 +110,9 @@ SOFTWARE.
 					</div>
 					<div class="control" v-if="errorOccured && playMode">
 						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
+					</div>
+					<div class="control">
+						<button v-bind:disabled="playMode" class="button is-primary" @click="takeScreenShot"><i class="fas fa-camera"></i>{{ $t("message.screenshot") }}</button>
 					</div>
 					<div class="control">
 						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}

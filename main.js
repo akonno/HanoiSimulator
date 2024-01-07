@@ -42,7 +42,8 @@ const messages = {
             play: 'Run simulation',
             pause: 'Pause',
             moveIfError: 'Move until error',
-            step: 'Step'
+            step: 'Step',
+            screenshot: 'Take screenshot'
         },
     },
     ja: {
@@ -55,7 +56,8 @@ const messages = {
             play: '実行',
             pause: '一時停止',
             moveIfError: 'エラーの場所まで実行',
-            step: 'ステップ'
+            step: 'ステップ',
+            screenshot: '画像を保存'
         },
     }
 };
@@ -128,7 +130,6 @@ const app = createApp({
       },
       canvasClicked()
       {
-        console.log('canvas is clicked.');
         if (this.playMode === true) {
             // pause
             this.playMode = false;
@@ -138,6 +139,16 @@ const app = createApp({
             // error occured but can run.
             this.playMode = true;
         }
+      },
+      takeScreenShot()
+      {
+        // https://jsfiddle.net/n853mhwo/
+        var a = document.createElement('a');
+        // Without 'preserveDrawingBuffer' set to true, we must render now
+        renderer.render(scene, camera);
+        a.href = renderer.domElement.toDataURL().replace("image/png", "image/octet-stream");
+        a.download = 'screenshot.png';
+        a.click();
       }
     }
   }).use(i18n).mount("#app");
