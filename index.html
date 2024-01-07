@@ -44,6 +44,7 @@ SOFTWARE.
 		</script>
 		<script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.prod.js"></script>
 		<script src="https://unpkg.com/vue-i18n@9.8.0/dist/vue-i18n.global.prod.js"></script>
+		<script type="module" src="main.js"></script>
 	</head>
 	<body>
 		<div id="app">
@@ -63,13 +64,13 @@ SOFTWARE.
 						<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
 					</div>
 					<div class="control" v-if="!errorOccured && !playMode">
-						<button v-bind:disabled="finished" class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
+						<button v-bind:disabled="finished" class="button is-primary" @click="play"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
 					</div>
 					<div class="control" v-if="!errorOccured && playMode">
 						<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
 					</div>
 					<div class="control" v-if="errorOccured && !playMode">
-						<button class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
+						<button v-bind:disabled="finished" class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
 					</div>
 					<div class="control" v-if="errorOccured && playMode">
 						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
@@ -78,12 +79,11 @@ SOFTWARE.
 						{{ $t("message.step") }} {{ currentMotionStep }} / {{ numTotalSteps }}
 					</div>
 				</div>
-				<div class="container" id="canvas"></div>
-				<script type="module" src="main.js"></script>
+				<div class="container" id="canvas" @click="canvasClicked"></div>
 			</section>
-			<section>
+			<section class="section">
 			<div class="container">
-				<div class="box">
+				<div class="box" id="controllerBox">
 					<h2 class="subtitle">
 					{{ $t("message.controller") }}
 				</h2>
@@ -97,13 +97,13 @@ SOFTWARE.
 						<button v-bind:disabled="currentMotionStep==0" class="button is-primary" @click="restore"><i class="fas fa-step-backward"></i>{{ $t("message.reset") }}</button>
 					</div>
 					<div class="control" v-if="!errorOccured && !playMode">
-						<button v-bind:disabled="finished" class="button is-primary" @click="move"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
+						<button v-bind:disabled="finished" class="button is-primary" @click="play"><i class="fas fa-play"></i>{{ $t("message.play") }}</button>
 					</div>
 					<div class="control" v-if="!errorOccured && playMode">
 						<button class="button is-primary" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>
 					</div>
 					<div class="control" v-if="errorOccured && !playMode">
-						<button class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
+						<button v-bind:disabled="finished" class="button is-danger" @click="moveIfError"><i class="fas fa-play"></i>{{ $t("message.moveIfError") }}</button>
 					</div>
 					<div class="control" v-if="errorOccured && playMode">
 						<button class="button is-danger" @click="pause"><i class="fas fa-pause"></i>{{ $t("message.pause") }}</button>

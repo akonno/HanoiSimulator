@@ -81,7 +81,7 @@ const app = createApp({
       };
     },
     methods: {
-      move()
+      play()
       {
           if (!this.compiled) {
               this.compiled = compile(this.motionCommands);
@@ -125,6 +125,19 @@ const app = createApp({
           this.compiled = this.errorOccured = false;
           this.currentMotionStep = this.numTotalSteps = 0;
           this.finished = false;
+      },
+      canvasClicked()
+      {
+        console.log('canvas is clicked.');
+        if (this.playMode === true) {
+            // pause
+            this.playMode = false;
+        } else if (this.errorOccured == false) {
+            this.play();
+        } else if (!this.finished) {
+            // error occured but can run.
+            this.playMode = true;
+        }
       }
     }
   }).use(i18n).mount("#app");
@@ -365,7 +378,7 @@ window.addEventListener('resize', onResize);
 
 function onResize()
 {
-    const width = document.getElementById("canvas").scrollWidth;
+    const width = document.getElementById("controllerBox").scrollWidth;
     const height = width / 16 * 9;
 
     // レンダラーのサイズを調整する
