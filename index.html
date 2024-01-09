@@ -51,7 +51,7 @@ SOFTWARE.
 			<section class="hero">
 				<div class="hero-body">
 					<div class="select is-small is-pulled-right">
-						<select v-model="selectedLocale" @change="switchLocale">
+						<select id="selectLocale" v-model="selectedLocale" @change="switchLocale">
 							<option disabled value="">Language</option>
 							<option value="en">English</option>
 							<option value="ja">Japanese / 日本語</option>
@@ -101,7 +101,7 @@ SOFTWARE.
 						<div class="column">
 							<label class="label">{{ $t("message.motioncommands") }}</label>
 							<div class="control has-icons-right">
-								<textarea class="textarea" v-model="motionCommands" @input="commandChanged"></textarea>
+								<textarea class="textarea" id="motionCommands" v-model="motionCommands" @input="commandChanged"></textarea>
 							</div>		
 						</div>
 						<div class="column">

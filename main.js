@@ -173,12 +173,43 @@ renderer.setSize(width, width / 16 * 9);
 document.getElementById("canvas").appendChild(renderer.domElement);
 
 // constants
-const pillarDistance = 3.2;
+const numDiscsDefault = 7;
 const pillarDiameter = 0.2;
-const pillarHeight = 3.0;
 const discThickness = 0.2;
-const numDiscs = 7;
 const animNumSteps = 60;
+
+// number of discs: can specify from URL
+let numDiscs = numDiscsDefault;
+let uri = window.location.href.split('?');
+if(uri.length == 2) {
+    let vars = uri[1].split('&');
+    let parsedVars = { 'numDiscs' : numDiscsDefault };
+    let tmp = '';
+    vars.forEach(function(v) {
+        tmp = v.split('=');
+        if(tmp.length == 2) {
+            if (tmp[0] === 'numDiscs') {
+                parsedVars[tmp[0]] = parseInt(tmp[1]);
+            } else {
+                console.warn('warning: irregal query parameter', tmp[0], 'is specified (ignored).');
+            }
+
+        }
+    });
+    // console.log(parsedVars);
+    if (1 < parsedVars.numDiscs) {
+        numDiscs = parsedVars.numDiscs;
+    } else {
+        console.warn('warning: numDiscs in query should be >2 but is <= 1');
+    }
+}
+
+// calculate visualization parameters such as the length of pillars and distance between them.
+const pillarHeight = (numDiscs + 2) * discThickness >= 3.0 ? (numDiscs + 2) * discThickness : 3.0;
+const largestDiscRadius = 0.4 + 0.1 * (numDiscs - 1);
+const pillarDistance = 2 * largestDiscRadius + 0.2 > 3.2 ? 2 * largestDiscRadius + 0.2 : 3.2;
+const hoverHeight = 0.5 * pillarHeight + 3 * discThickness > 1.8 ? 0.5 * pillarHeight + 3 * discThickness : 1.8;
+const cameraZ = 0.35 * numDiscs > 6 ? 0.35 * numDiscs : 6;
 
 // Light
 const light1 = new THREE.AmbientLight(0xffffff, 0.8);
@@ -257,14 +288,13 @@ for (let i = 0; i < numDiscs; ++i) {
 
 // Camera position
 // normal
-camera.position.z = 6;
+camera.position.z = cameraZ;
 camera.position.y = 1;
 // close view
 // camera.position.z = 4;
 // camera.position.y = 3;
 // camera.rotation.x = -0.5;
 
-const hoverHeight = 1.8;
 let step = 0;
 let compiledMotions = [];
 let errorLine = -1;
