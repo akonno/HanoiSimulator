@@ -50,6 +50,13 @@ SOFTWARE.
 		<div id="app">
 			<section class="hero">
 				<div class="hero-body">
+					<div class="select is-small is-pulled-right">
+						<select v-model="selectedLocale" @change="switchLocale">
+							<option disabled value="">Language</option>
+							<option value="en">English</option>
+							<option value="ja">Japanese / 日本語</option>
+						</select>
+					</div>
 					<h1 class="title">
 					{{ $t("message.hanoisimulatortitle") }}
 					</h1>

@@ -79,7 +79,8 @@ const app = createApp({
         currentMotionStep: 0,
         numTotalSteps: 0,
         finished: false,
-        motionCommands: "A,B\nA,C\nB,C\nA,B\nC,A\nC,B\nA,B"
+        motionCommands: "A,B\nA,C\nB,C\nA,B\nC,A\nC,B\nA,B",
+        selectedLocale: ''
       };
     },
     methods: {
@@ -149,6 +150,11 @@ const app = createApp({
         a.href = renderer.domElement.toDataURL().replace("image/png", "image/octet-stream");
         a.download = 'screenshot.png';
         a.click();
+      },
+      switchLocale()
+      {
+        this.$i18n.locale = this.selectedLocale;
+        // console.log('locale is changed to ', this.$i18n.locale);
       }
     }
   }).use(i18n).mount("#app");
