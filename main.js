@@ -95,6 +95,7 @@ const app = createApp({
           } else {
               this.errorOccured = false;
               this.playMode = true;
+              // console.time('Execution Time');
           }
       },
       pause()
@@ -404,6 +405,7 @@ function animate() {
         if (animStep >= finalStep) {
             app.playMode = false;
             app.finished = true;
+            // console.timeEnd('Execution Time');
         } else {
             app.finished = false;
             const disc = discs[compiledMotions[animStep][0]];
