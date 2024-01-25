@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>About | Hanoi Simulator</title>
+		<style>
+			body { margin: 0; }
+		</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+		<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	</head>
+	<body>
+        <section class="hero">
+            <div class="hero-body">
+                <h1 class="title">
+                    About | The Tower of Hanoi Simulator
+                </h1>
+            </div>
+        </section>
+        <section class="section">
+            <div class="block">
+                <h2 class="subtitle">How to simulate the tower of Hanoi</h2>
+                <p class="content">
+                    The Tower of Hanoi consists of three pillars and multiple discs. The pillars are named A, B, and C, from left to right. Initially, all the discs are placed on pillar A.
+                </p>
+                <img src="./public/screen-en.png" alt="[Simulator Screen]" />
+                <p class="content">
+                    The instructions for moving the discs are simple. Write one line of instruction to move a disc once. To move the top disc from pillar A to the top of pillar B, write "A,B." For moving the top disc from pillar B to the top of pillar C, write "B,C." By entering these instructions in the "Motion commands" text area, you can specify the movements of the discs.
+                </p>
+                <p class="content">
+                    After completing the instruction entry, click the "Run commands" button to initiate the animation (this button will then change to the "Pause" button). Alternatively, you can start the animation by clicking on the Tower of Hanoi screen. To pause the animation, either click the "Pause" button or click on the animation screen once more.
+                </p>
+                <p class="content">
+                    When the animation is paused, you can save a screenshot of the animation screen by pressing the "Take screenshot" button.
+                </p>
+            </div>
+		</section>
+        <section class="section">
+            <!-- <div class="block"> -->
+                <h2 class="subtitle">For teachers</h2>
+                <p class="content">
+                    This simulator was developed for teachers who teach programming.
+                </p>
+                <p class="content">
+                    Suppose you are a teacher instructing programming and want to teach your students about the concept of recursive calls. You might want them to solve the famous puzzle '<a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>', which utilizes the idea of recursion. However, while you can teach the concept of the Tower of Hanoi, it might be challenging to make the class appealing to students who are just beginning to learn programming, as replicating the movement of discs in the Tower of Hanoi on a screen requires extensive knowledge beyond just recursion.
+                </p>
+                <p class="content">
+                    This 'Hanoi Simulator' is a program that moves the discs of the 'Tower of Hanoi' according to given instructions. The simulator itself does not have the functionality to solve the Tower of Hanoi puzzle. (However, it does come with initial instructions to move three discs.) You will have your students write a program that outputs instructions for moving the discs in the Tower of Hanoi. Then, by executing these outputs in this simulator, you can visually confirm through animation whether the 'Tower of Hanoi' has been solved correctly.
+                </p>
+                <h3 class="subtitle is-6 is-underlined">Using the Simulator in Classrooms</h3>
+                <p class="content">
+                    In the class, participants will output a set of instructions to move the discs of the Tower of Hanoi using their own programs. They will then copy and paste these instructions into the Hanoi Simulator to solve the Tower of Hanoi puzzle. By submitting a screenshot of their results, instructors can determine whether the students were able to solve the Tower of Hanoi puzzle.
+                </p>
+            <!-- </div> -->
+            <!-- <div class="block"> -->
+                <h2 class="subtitle is-6 is-underlined">How to change the number of discs</h2>
+                <p class="content">If you want students to attempt puzzles with more or fewer discs, you can set the number of discs by specifying it in the "numDiscs" URL parameter.</p>
+                <ul class="content">
+                    <li><a href="./?numDiscs=5">5 discs</a></li>
+                    <li><a href="./?numDiscs=6">6 discs</a></li>
+                    <li><a href="./?numDiscs=7">7 discs</a> (default)</li>
+                    <li><a href="./?numDiscs=8">8 discs</a></li>
+                    <li><a href="./?numDiscs=9">9 discs</a></li>
+                    <li><a href="./?numDiscs=10">10 discs</a></li>
+                </ul>
+            <!-- </div> -->
+		</section>
+        <section class="section">
+            <div class="block">
+                <h2 class="subtitle">Source and Credit</h2>
+                <p>Source: <a href="https://github.com/akonno/hanoisimulator" target="_blank">Hanoi Simulator</a> on <a href="https://github.com/" target="_blank">GitHub</a></p>
+                <p>Textures for the floor, discs and pillars by <a href="https://ambientcg.com/" target="_blank">Lennart Demes at ambientCG</a></p>
+                <p><a href="./">Back to Simulator</a></p>
+            </div>
+		</section>
+		<footer class="footer">
+			<div class="content has-text-centered">
+			  <p>
+				<a href="https://github.com/akonno/hanoisimulator"><strong>Hanoi Simulator</strong></a> by KONNO Akihisa</a>
+			  </p>
+			</div>
+		</footer>
+	</body>
+</html>
