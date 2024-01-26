@@ -42,12 +42,17 @@ SOFTWARE.
 			  }
 			}
 		</script>
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+		</style>
 		<script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.prod.js"></script>
 		<script src="https://unpkg.com/vue-i18n@9.8.0/dist/vue-i18n.global.prod.js"></script>
 		<script type="module" src="main.js"></script>
 	</head>
 	<body>
-		<div id="app">
+		<div id="app" v-cloak>
 			<section class="hero">
 				<div class="hero-body">
 					<div class="select is-small is-pulled-right">
@@ -136,7 +141,7 @@ SOFTWARE.
 			</section>
 		</div>
 		<section class="section">
-			<p><a href="about.html">About this simulator</a></p>
+			<p><a href="about.html">How to use this simulator</a></p>
 			<p>Source: <a href="https://github.com/akonno/hanoisimulator" target="_blank">Hanoi Simulator</a> on <a href="https://github.com/" target="_blank">GitHub</a></p>
 			<p>Textures for the floor, discs and pillars by <a href="https://ambientcg.com/" target="_blank">Lennart Demes at ambientCG</a></p>
 		</section>
